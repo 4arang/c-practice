@@ -1,0 +1,7 @@
+﻿  c++practice.cpp
+c:\users\inha323-19\source\repos\c++practice\c++practice\exc_mean.h(14): warning C4129: ' ': 문자 이스케이프 시퀀스를 인식할 수 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(7): warning C4290: 함수가 __declspec(nothrow)가 아님을 나타내려는 경우를 제외하고 C++ 예외 사양은 무시됩니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(13): warning C4290: 함수가 __declspec(nothrow)가 아님을 나타내려는 경우를 제외하고 C++ 예외 사양은 무시됩니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(50): warning C5043: 'gmean': 예외 사양이 이전 선언과 일치하지 않습니다.
+  c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(13): note: 'gmean' 선언을 참조하십시오.
+  c++practice.vcxproj -> C:\Users\Inha323-19\source\repos\c++practice\Debug\c++practice.exe
