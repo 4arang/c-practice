@@ -1,7 +1,116 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
+//#include <iostream>
+//
+//using namespace std;
+//
+//class Base
+//{
+//public :
+//	int a = 10;
+//	void Print()
+//	{
+//		cout << "From Base!" << endl;
+//
+//	}
+//};
+//class Derived : public Base
+//{
+//public:
+//	void Print()
+//	{
+//		cout << "From Derived!" << endl;
+//	}
+//	int a = 20;
+//};
+//
+//int main()
+//{
+//	Base b;
+//	Derived d;
+//	//cout << b.a << endl;
+//	//cout << d.a << endl;
+//	//cout << d.Base::a << endl;
+//	//cout << d.Derived::a << endl;
+//	//cout << d.Derived::Base::a << endl;
+//	d.Print();
+//	d.Base::Print();
+//}
 
 
+#include <iostream>
+#include "stopwatch.h"
+
+using namespace std;
+void quick(int *str, int n);
+int main()
+{
+
+	//srand((unsigned)time(0));
+	int n;
+	cout << "입력받을 정수 개수 : ";
+	cin >> n;
+	cout << "임의 수열 입력 : ";
+	int *str = new int[n];
+	for (int i = 0; i < n; i++)
+		cin >> str[i];
+	quick(str, n);
+
+	delete[] str;
+
+
+	return 0;
+}
+void quick(int *str, int n)
+{
+	stopwatch timecheck;
+	timecheck.start();
+	int cnt = 0;
+	int swap = 0;
+	
+	for (int i = 0; i < n / 2; i++)
+	{
+		int pivot = n / 2 - 1;
+		int pl = i;
+		int pr = n - 1-i;
+		if (str[pl] > str[pivot])
+		{
+			if (str[pr] < str[pivot])
+			{
+				int temp = str[pr];
+				str[pr] = str[pl];
+				str[pl] = temp;
+			}
+		}
+	}
+	int pivot = 0;
+	while (1)
+	{
+		for (int i = n - 1; i > 0; i--)
+		{
+			if (str[i] < str[pivot])
+			{
+				int temp = str[i];
+				str[i] = str[pivot];
+				str[pivot] = temp;
+				pivot = i;
+				break;
+			}
+		}
+		for(int j = 1;)
+	}
+
+	timecheck.stop();
+	cout << endl;
+	for (int i = 0; i < n; i++)
+		cout << str[i] << " ";
+	cout << endl << "총 " << cnt << "번 시도" << endl;
+	cout << "총 " << swap << "번 교환" << endl;
+
+	timecheck.stop();
+	cout << "총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
+
+}
 
 
 
@@ -24,6 +133,82 @@
 
 
 /*
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using std::cout;
+
+class Grand
+{
+private:
+	int hold;
+
+public:
+	Grand(int h = 0) : hold(h) {}
+	virtual void Speak() const { cout << "나는 Grand 클래스이다!\n"; }
+	virtual int Value() const { return hold; }
+};
+class Superb : public Grand
+{
+public:
+	Superb(int h = 0) : Grand(h) {}
+	void Speak() const { cout << "나는 Superb 클래스이다!\n"; }
+	virtual void Say() const
+	{
+		cout << "내가 가지고 있는 Superb 값은 " << Value() << "이다.\n";
+	}
+};
+class Magnificent : public Superb {
+private: char ch;
+public :
+	Magnificent(int h = 0, char c = 'A') : Superb(h), ch(c) {}
+	void Speak() const { cout << "나는 Magnificent 클래스이다!!\n"; }
+	void Say() const {
+		cout << "내가 가지고 있는 문자는 " << ch << "이고, 정수는"
+			<< Value() << "이다.\n";
+	}
+};
+Grand * GetOne();
+
+int main()
+{
+	std::srand(std::time(0));
+	Grand *pg;
+	Superb * ps;
+	for (int i = 0; i < 5; i++)
+	{
+		pg = GetOne();
+		pg->Speak();
+		if (ps = dynamic_cast<Superb *>(pg))
+			ps->Say();
+		else
+		{
+
+		}
+
+	}
+	return 0;
+}
+
+Grand * GetOne()
+{
+	Grand * p;
+	switch (std::rand() % 3)
+	{
+	case 0:p = new Grand(std::rand() % 100);
+		break;
+	case 1: p = new Superb(std::rand() % 100);
+		break;
+	case 2: p = new Magnificent(std::rand() % 100, 'A' + std::rand() % 26);
+		break;
+	}
+	return p;
+}
+
+
+
+
 
 #include <iostream>
 #include <cmath>

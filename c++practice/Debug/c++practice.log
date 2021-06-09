@@ -1,7 +1,37 @@
 ﻿  c++practice.cpp
-c:\users\inha323-19\source\repos\c++practice\c++practice\exc_mean.h(14): warning C4129: ' ': 문자 이스케이프 시퀀스를 인식할 수 없습니다.
-c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(7): warning C4290: 함수가 __declspec(nothrow)가 아님을 나타내려는 경우를 제외하고 C++ 예외 사양은 무시됩니다.
-c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(13): warning C4290: 함수가 __declspec(nothrow)가 아님을 나타내려는 경우를 제외하고 C++ 예외 사양은 무시됩니다.
-c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(50): warning C5043: 'gmean': 예외 사양이 이전 선언과 일치하지 않습니다.
-  c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(13): note: 'gmean' 선언을 참조하십시오.
-  c++practice.vcxproj -> C:\Users\Inha323-19\source\repos\c++practice\Debug\c++practice.exe
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(73): error C3927: '->': 후행 반환 형식은 비함수 선언자 뒤에 올 수 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(73): error C3484: 구문 오류: 반환 형식 앞에 '->'가 필요합니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(73): error C3613: '->' 후 반환 형식이 없습니다('int'로 간주됨).
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(73): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(73): error C2146: 구문 오류: ';'이(가) 'stop' 식별자 앞에 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(74): error C2143: 구문 오류: ';'이(가) '<<' 앞에 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(74): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(75): error C2059: 구문 오류: 'for'
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(75): error C2143: 구문 오류: ')'이(가) ';' 앞에 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(75): error C2143: 구문 오류: ';'이(가) '<' 앞에 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(75): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(75): error C2143: 구문 오류: ';'이(가) '++' 앞에 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(75): error C2086: 'int i': 재정의
+  c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(75): note: 'i' 선언을 참조하십시오.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(75): error C2059: 구문 오류: ')'
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(77): error C2143: 구문 오류: ';'이(가) '<<' 앞에 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(77): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(77): error C2086: 'int cout': 재정의
+  c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(74): note: 'cout' 선언을 참조하십시오.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(78): error C2143: 구문 오류: ';'이(가) '<<' 앞에 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(78): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(78): error C2086: 'int cout': 재정의
+  c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(74): note: 'cout' 선언을 참조하십시오.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(80): error C3927: '->': 후행 반환 형식은 비함수 선언자 뒤에 올 수 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(80): error C3484: 구문 오류: 반환 형식 앞에 '->'가 필요합니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(80): error C3613: '->' 후 반환 형식이 없습니다('int'로 간주됨).
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(80): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(80): error C2086: 'int timecheck': 재정의
+  c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(73): note: 'timecheck' 선언을 참조하십시오.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(80): error C2146: 구문 오류: ';'이(가) 'stop' 식별자 앞에 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(81): error C2143: 구문 오류: ';'이(가) '<<' 앞에 없습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(81): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(81): error C2086: 'int cout': 재정의
+  c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(74): note: 'cout' 선언을 참조하십시오.
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(83): error C2059: 구문 오류: '}'
+c:\users\inha323-19\source\repos\c++practice\c++practice\c++practice.cpp(83): error C2143: 구문 오류: ';'이(가) '}' 앞에 없습니다.
