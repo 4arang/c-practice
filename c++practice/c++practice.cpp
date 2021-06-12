@@ -1,39 +1,105 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
-#include <iostream>
-using namespace std;
 
-//다운캐스팅 static
 
-class Base {
-public :
-	int a = 1;
-};
-class Drv1 : public Base {
-public:
-	float b = 3.14;
-	void f() {
-		cout << "Drv::f()" << endl;
-		cout << b << endl;
-	}
-};
-class Drv2 : public Base {
-public:
-	int c = 3;
-	void f() {
-		cout << "Drv2::f()" << endl;
-		cout << c << endl;
-	}
-};
-int main()
-{
-	Base *b = new Drv1;
-	int *a = new int(5);
-	Drv2 *d2 = static_cast<Drv2*>(b);
-	d2->f();
-	delete a;
-	delete b;
-}
+
+////dynamic cast
+////RTTI run time type information
+//#include <iostream>
+//#include <math.h>
+//const double PI = 3.141592;
+//using namespace std;
+////순수 가상함수
+//class Shape {
+//public:
+//	virtual double GetArea() const = 0;
+//	virtual void Resize(double k) = 0;
+//};
+//class Circle : public Shape{
+//public:
+//	Circle(double r) :r(r) {}
+//	double GetArea() const {
+//		return PI * r*r;
+//	}
+//	void Resize(double k) {
+//		r *= k;
+//	}
+//private:
+//	double r;
+//};
+//
+//class Rectangel : public Shape{
+//public:
+//	Rectangel(double a, double b) : a(a), b(b) {}
+//	double GetArea() const {
+//		return a * b;
+//	}
+//	void Resize(double k) {
+//		a *= k;
+//		b *= k;
+//	}
+//	double GetDiag() const {
+//		return sqrt(a*a + b * b);
+//	}
+//private:
+//	double a, b;
+//};
+//
+//int main()
+//{
+//	Shape *shapes[] = {
+//		new Circle(1),
+//		new Rectangel(1, 2)
+//	};
+//	for (Shape *s : shapes)
+//		s->Resize(2);
+//	for (int i = 0; i<2; i++)
+//	{
+//		cout << "도형의 넓이 : "<<shapes[i]->GetArea() << endl;
+//		Rectangel *r = dynamic_cast<Rectangel*>(shapes[i]);
+//		if (r != NULL)
+//		{
+//			cout << "대각선의 길이 : " << r->GetDiag() << endl;
+//		}
+//	}
+//	for (Shape *s : shapes) { delete s; }
+//}
+
+
+//#include <iostream>
+//using namespace std;
+//
+////다운캐스팅 static
+//
+//class Base {
+//public :
+//	int a = 1;
+//};
+//class Drv1 : public Base {
+//public:
+//	float b = 3.14;
+//	void f() {
+//		cout << "Drv::f()" << endl;
+//		cout << b << endl;
+//	}
+//};
+//class Drv2 : public Base {
+//public:
+//	int c = 3;
+//	void f() {
+//		cout << "Drv2::f()" << endl;
+//		cout << c << endl;
+//	}
+//};
+//int main()
+//{
+//	Base *b = new Drv1;
+//	int *a = new int(5);
+//	Drv2 *d2 = static_cast<Drv2*>(b);
+//	d2->f();
+//	delete a;
+//	delete b;
+//}
 
 
 
