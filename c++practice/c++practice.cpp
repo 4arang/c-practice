@@ -1,11 +1,394 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
-#include <iostream>
-using namespace std;
-int main()
-{
-	cout << "hello world!" << endl;
-}
+
+
+
+//#include <iostream>
+//
+//using namespace std;
+//
+//int brute_force(const char data[], const char pat[]);
+//int main()
+//{
+//	char *data = new char[1000];
+//	char *pattern = new char[100];
+//
+//	cout << "데이터 입력 : ";
+//		cin >> data;
+//		cout << "패턴 입력 : ";
+//		cin >> pattern;
+//	int n = brute_force(data, pattern);
+//	if (n != -1)
+//		cout << n << "번째에서 발견!";
+//	else
+//		cout << "발견하지 못했습니다!";
+//
+//	delete[] data;
+//	delete[] pattern;
+//		return 0;
+//}
+//
+//int brute_force(const char data[], const char pat[])
+//{
+//	int i = 0;
+//	int dat_size = strlen(data);
+//	int pat_size = strlen(pat);
+//
+//		for (i; i < dat_size; i++)
+//	{
+//			for (int j = 0; j < pat_size; j++)
+//			{
+//				if (pat[j] != data[i + j])
+//				{
+//					cout << data << endl;
+//					for (int k = 0; k < i + j; k++)
+//						cout << " ";
+//					cout << "|"<<endl;
+//					for (int k = 0; k < i; k++)
+//						cout << " ";
+//					cout << pat << endl;
+//					cout << endl;
+//					goto CON;
+//				}
+//				else
+//				{
+//					cout << data << endl;
+//					for (int k = 0; k < i + j; k++)
+//						cout << " ";
+//					cout << "+" << endl;
+//					for (int k = 0; k < i ; k++)
+//						cout << " ";
+//					cout << pat << endl;
+//					cout << endl;
+//				}
+//
+//			}
+//			break;
+//		CON:continue;
+//	
+//
+//	}
+//		if (i < dat_size - 1)
+//
+//			return i + 1;
+//		else
+//			return -1;
+//}
+
+
+
+
+
+//#define _CRT_SECURE_NO_WARNINGS
+//
+//#include <iostream>
+//
+//using namespace std;
+//
+//int brute_force(const char data[], const char pat[]);
+//int main()
+//{
+//	char *data = new char[1000];
+//	char *pattern = new char[100];
+//
+//	cout << "데이터 입력 : ";
+//	cin >> data;
+//	cout << "패턴 입력 : ";
+//	cin >> pattern;
+//	int n = brute_force(data, pattern);
+//	if (n != -1)
+//		cout << n << "번째에서 발견!";
+//	else
+//		cout << "발견하지 못했습니다!";
+//
+//	delete[] data;
+//	delete[] pattern;
+//	return 0;
+//}
+//
+//int brute_force(const char data[], const char pat[])
+//{
+//	int i = 0;
+//	int dat_size = strlen(data);
+//	int pat_size = strlen(pat);
+//
+//	for (i; i < dat_size; i++)
+//	{
+//		for (int j = 0; j < pat_size; j++)
+//		{
+//			if (pat[j] != data[i + j])
+//				goto CON;
+//
+//		}
+//		break;
+//	CON:continue;
+//
+//
+//	}
+//	if (i < dat_size - 1)
+//
+//		return i + 1;
+//	else
+//		return -1;
+//}
+
+
+//int main()
+//{
+//	char data[100] = "akfnelingolenjenvaejnfabcaskfeqlihng";
+//	char abc[100] = "abc";
+//	int i = 0;
+//	for (i = 0; i < 100; i++)
+//	{
+//		if (abc[i] != data[i])
+//			continue;
+//		if (abc[i + 1] != data[i + 1])
+//			continue;
+//		if (abc[i + 2] != data[i + 2])
+//			continue;
+//		else
+//			break;
+//	}
+//
+//	cout << i - 2 << "번째에서 발견!" << endl;
+//	return 0;
+//}
+
+//#include <iostream>
+//#include "stopwatch.h"
+//
+//using namespace std;
+//void dosu(int *str, int n, int score);
+//int main()
+//{
+//
+//	//srand((unsigned)time(0));
+//	int n;
+//	int score;
+//	cout << "입력받을 점수 개수 : ";
+//	cin >> n;
+//	cout << "최대 점수 : ";
+//		cin >> score;
+//	cout << "임의 점수 입력 : ";
+//	int *str = new int[n];
+//	for (int i = 0; i < n; i++)
+//		cin >> str[i];
+//	dosu(str, n, score);
+//
+//	delete[] str;
+//
+//
+//	return 0;
+//}
+//void dosu(int *str, int n, int score)
+//{
+//	stopwatch timecheck;
+//	timecheck.start();
+//	int cnt = 0;
+//	int swap = 0;
+//	int *arr = new int[score+1] {};
+//	for (int i = 0; i < n; i++)
+//	{
+//		(arr[str[i]])++;
+//	}
+//
+//
+//
+//
+//	timecheck.stop();
+//	cout << endl;
+//	for (int i = 0; i < score+1; i++)
+//		cout << "arr["<<i<<"] : "<< arr[i] <<endl;
+//	for (int i = 0; i < score+1; i++)
+//	{
+//		
+//			while(arr[i]--)
+//			cout << i << " ";
+//		
+//	}
+//	cout << endl << "총 " << cnt << "번 시도" << endl;
+//	cout << "총 " << swap << "번 교환" << endl;
+//	cout << "총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
+//	delete[] arr;
+//}
+
+
+
+
+
+
+//#include <iostream>
+//#include <fstream>
+//#include <iomanip>
+//#include <cstdlib>
+//
+//const int LIM = 20;
+//inline void eatline() { while (std::cin.get() != '\n') continue; }
+//struct planet
+//{
+//	char name[20];
+//	double population;
+//	double g;
+//};
+//const char *file = "planets.dat";
+//int main()
+//{
+//	using namespace std;
+//	planet pl;
+//	cout << fixed;
+//
+//	ifstream fin;
+//	fin.open(file, ios_base::in | ios_base::binary);
+//	int ct = 0;
+//	if (fin.is_open())
+//	{
+//		fin.seekg(0);
+//		cout << file << " 파일의 현재 내용은 다음과 같습니다:\n";
+//		while (fin.read((char *)&pl, sizeof pl))
+//		{
+//			cout << ct++ << ": " << setw(LIM) << pl.name << ": "
+//				<< setprecision(0) << setw(12) << pl.population
+//				<< setprecision(2) << setw(6) << pl.g << endl;
+//		}
+//		if (fin.eof())
+//			fin.clear();
+//		else
+//		{
+//			cerr << file << " 파일을 읽다가 에러 발생.\n";
+//			exit(EXIT_FAILURE);
+//		}
+//	}
+//	else
+//	{
+//		cerr << file << " 파일을 열 수 없습니다. \n";
+//		exit(EXIT_FAILURE);
+//	}
+//	cout << "수정할 레코드 번호를 입력하십시오: ";
+//	long rec;
+//	cin >> rec;
+//	eatline();
+//	if (rec < 0 || rec >= ct)
+//	{
+//		cerr << "잘못된 레코드 번호입니다. 종료.\n";
+//		exit(EXIT_FAILURE);
+//	}
+//	streampos place = rec * sizeof pl;
+//	fin.seekg(place);
+//	if (fin.fail())
+//	{
+//		cerr << "레코드를 찾다가 에러 발생.\n";
+//		exit(EXIT_FAILURE);
+//	}
+//	fin.read((char *)&pl, sizeof pl);
+//	cout << "현재 레코드의 내용 \n";
+//	cout<<rec<<": "<<setw(LIM) <<pl.name<<": "
+//		<< setprecision(0) << setw(12) << pl.population
+//		<< setprecision(2) << setw(6) << pl.g << endl;
+//	if (fin.eof())
+//		fin.clear();
+//
+//	cout << "행성의 이름을 입력하십시오(끝내려면 빈 줄 입력) : \n";
+//	cin.get(pl.name, LIM);
+//		eatline();
+//		cout << "행성의 인구를 입력하십시오: ";
+//		cin >> pl.population;
+//		cout << "행성의 중력가속도를 입력하십시오: ";
+//		cin >> pl.g;
+//		fin.seekp(place);
+//		fin.write((char *)&pl, sizeof pl) << flush;
+//		if (fin.fail())
+//		{
+//			cerr << "쓰다가 에러 발생\n";
+//			exit(EXIT_FAILURE);
+//		}
+//	fout.close();
+//
+//	fin.clear();
+//	fin.open(file, ios_base::in | ios_base::binary);
+//	if (fin.is_open())
+//	{
+//		cout << file << "파일의 개정된 내용은 다음과 같습니다.:\n";
+//		while (fin.read((char *) &pl, sizeof pl))
+//		{
+//		cout << setw(20) << pl.name << ": "
+//			<< setprecision(0) << setw(12) << pl.population
+//			<< setprecision(2) << setw(6) << pl.g << endl;
+//		}
+//		fin.close();
+//
+//	}
+//	cout << "프로그램을 종료합니다.\n";
+//	return 0;
+//}
+
+
+
+
+
+//#include <iostream>
+//#include <fstream>
+//#include <string>
+//#include <cstdlib>
+//
+//
+//const char * file = "guests.txt";
+//int main()
+//{
+//	using namespace std;
+//	char ch;
+//
+//	ifstream fin;
+//	fin.open(file);
+//	if (fin.is_open())
+//	{
+//		cout << file << "파이르이 현재 내용은 다음과 같습니다:\n";
+//		while (fin.get(ch))
+//			cout << ch;
+//		fin.close();
+//	}
+//	ofstream fout(file, ios_base::out | ios_base::app);
+//	if (!fout.is_open())
+//	{
+//		cerr << "출력을 위해 " << file << " 파일을 열 수 없습니다.\n";
+//		exit(EXIT_FAILURE);
+//
+//	}
+//	cout << "새로운 손님 이름들을 입력하십시오(끝내려면 빈 줄 입력): \n";
+//	string name;
+//	while (getline(cin, name) && name.size() > 0)
+//	{
+//		fout << name << endl;
+//	}
+//	fout.close();
+//
+//	fin.clear();
+//	fin.open(file);
+//	if (fin.is_open())
+//	{
+//		cout << file << " 파일의 개졍된 내용은 다음과 같습니다:\n";
+//		while (fin.get(ch))
+//			cout << ch;
+//		fin.close();
+//	}
+//	cout << "프로그램을 종료합니다.\n";
+//	return 0;
+//}
+//
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ////dynamic cast
