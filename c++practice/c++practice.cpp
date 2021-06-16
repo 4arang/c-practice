@@ -1,5 +1,174 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
+#include <iostream>
+#include "stopwatch.h"
+using namespace std;
+
+int brute_force(const char data[], const char pat[]);
+int kmp(const char data[], const char pat[]);
+
+int main()
+{
+	char *data = new char[100000000];
+	char *pattern = new char[100];
+	srand((unsigned)time(0));
+	cout << "데이터 입력 : ";
+	for (int i = 0; i < 100000000; i++)
+	{
+		data[i]= 'a' + rand() % 26;
+		//cout << data[i];
+	}
+
+	//char *data = new char[10000];
+	//char *pattern = new char[100];
+	//srand((unsigned)time(0));
+	//cout << "데이터 입력 : ";
+	//cin >> data;	
+		cout <<endl<< "패턴 입력 : ";
+		cin >> pattern;
+	int bn = brute_force(data, pattern);
+
+	if (bn != -1)
+		cout << bn << "번째에서 발견!"<<endl;
+	else
+		cout << "발견하지 못했습니다!"<<endl;
+	
+	int kn = kmp(data, pattern);
+	if (kn != -1)
+		cout << kn << "번째에서 발견!"<<endl;
+	else
+		cout << "발견하지 못했습니다!"<<endl;
+
+
+	delete[] data;
+	delete[] pattern;
+		return 0;
+}
+
+int kmp(const char data[], const char pat[])
+{
+	stopwatch timecheck;
+	timecheck.start();
+
+	int i = 0;
+	int dat_size = strlen(data);
+	int pat_size = strlen(pat);
+
+	for (i; i < dat_size; i++)
+	{
+		int cnt = 0; //반복되는 경우 넘기기 위한 카운트
+		for (int j = 0; j < pat_size; j++)
+		{
+			
+			if (pat[j] != data[i + j])
+			{
+				///////////////////출력부////////////////
+				//cout << data << endl;
+				//for (int k = 0; k < i + j; k++)
+				//	cout << " ";
+				//cout << "|" << endl;
+				//for (int k = 0; k < i; k++)
+				//	cout << " ";
+				//cout << pat << endl;
+				//cout << endl;
+				///////////////////////////////////////
+				if(cnt!=0)
+				i += cnt-1; //불일치하는경우 카운트를 더해서 건너뜀/ 다음 i++고려해서 -1;
+				goto CON;
+			}
+			else
+			{
+				cnt++;	//일치하는 경우 카운트++;
+				//////////////출력부////////////////
+				//cout << data << endl;
+				//for (int k = 0; k < i + j; k++)
+				//	cout << " ";
+				//cout << "+" << endl;
+				//for (int k = 0; k < i; k++)
+				//	cout << " ";
+				//cout << pat << endl;
+				//cout << endl;
+				//////////////////////////////////
+			}
+
+		}
+		break;
+	CON:continue;
+
+	}
+	timecheck.stop();
+	cout << "kmp 총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
+	if (i < dat_size - 1)
+
+		return i + 1;
+	else
+		return -1;
+}
+
+int brute_force(const char data[], const char pat[])
+{
+	stopwatch timecheck;
+timecheck.start();
+
+	int i = 0;
+	int dat_size = strlen(data);
+	int pat_size = strlen(pat);
+
+		for (i; i < dat_size; i++)
+	{
+			for (int j = 0; j < pat_size; j++)
+			{
+				if (pat[j] != data[i + j])
+				{
+					//cout << data << endl;
+					//for (int k = 0; k < i + j; k++)
+					//	cout << " ";
+					//cout << "|"<<endl;
+					//for (int k = 0; k < i; k++)
+					//	cout << " ";
+					//cout << pat << endl;
+					//cout << endl;
+					goto CON;
+				}
+				else
+				{
+					//cout << data << endl;
+					//for (int k = 0; k < i + j; k++)
+					//	cout << " ";
+					//cout << "+" << endl;
+					//for (int k = 0; k < i ; k++)
+					//	cout << " ";
+					//cout << pat << endl;
+					//cout << endl;
+				}
+
+			}
+			break;
+		CON:continue;
+	
+
+	}
+		timecheck.stop();
+cout << "brute_force 총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
+		if (i < dat_size - 1)
+
+			return i + 1;
+		else
+			return -1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 //용량이 큰 파일을 작은 용량으로 분할해서 작은 단위의 파일로 나누는 유틸리티 프로그램을 작성
 //사용자로부터 소스 파일을 입력받은 후 각각 분할된 작은 파일의 바이트 값을 입력받아
 //해당 크기만큼 파일로 분할한다.
