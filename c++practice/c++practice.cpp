@@ -1,5 +1,104 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
+//용량이 큰 파일을 작은 용량으로 분할해서 작은 단위의 파일로 나누는 유틸리티 프로그램을 작성
+//사용자로부터 소스 파일을 입력받은 후 각각 분할된 작은 파일의 바이트 값을 입력받아
+//해당 크기만큼 파일로 분할한다.
+//enter file name : test.zip
+//enter file size : 1024
+//-> file test0.div
+//file test1.div ... split done!
+//문2. 사용자로부터 분할된 소스파일의 개수, 소스파일의 이름, 목적 파일의 이름을 입력받아
+//새로운 하나의 파일로 조합하는 프로그램을 작성
+//enter file number : 2
+//enter source file name 1 :Test0.div, Test1.div
+//enter target filename : Temp.zip
+//.... combine done!
+
+
+//#include <iostream>
+//#include <fstream>
+//#include <iomanip>
+//#include <cstdlib>
+//#include <string>
+//#include <filesystem>
+//using namespace std;
+//
+//int main()
+//{
+//	cout << fixed;
+//	int fileNumber;
+//	cout << "Enter file number : ";
+//	cin >> fileNumber;
+//	string *filename = new string[fileNumber];
+//	for (int i = 0; i < fileNumber; i++)
+//	{
+//		cout << "Enter source file name : ";
+//			cin >> filename[i];
+//			ifstream fin;
+//			fin.open(filename[i], ios_base::in | ios_base::binary);
+//
+//			char **buf = nullptr;
+//			buf = new char*[fileNumber];
+//			for (int i = 0; i < fileNumber; i++)
+//				buf[i] = new char[fileNumber];
+//	}
+//	
+//	string TargetName;
+//	cout << "Enter target file name : ";
+//	cin >> TargetName;
+//
+//
+//	delete[] filename;
+//}
+
+//#include <iostream>
+//#include <fstream>
+//#include <iomanip>
+//#include <cstdlib>
+//#include <string>
+//#include <filesystem>
+//using namespace std;
+//
+//int main()
+//{
+//	cout << fixed;
+//	cout << "Enter file name : ";
+//	string fileName;
+//	cin >> fileName;
+//
+//	cout << "Enter file size : ";
+//	long long fileSize;
+//	cin >> fileSize;
+//
+//	ifstream fin;
+//	fin.open(fileName, ios_base::in | ios_base::binary);
+//	long long orgSize;
+//	long long div;
+//
+//
+//		fin.seekg(0, fin.end);			//끝으로가서
+//		orgSize = fin.tellg();			//파일 길이 알아오기
+//		cout << "Entire file size : " << orgSize << endl;
+//		div = orgSize / fileSize;
+//		cout << "Number of files : " << div+1 << endl;
+//		fin.seekg(0, ios::beg);		//다시 처음으로와서
+//		char *buf = new char[orgSize]; //전체크기 메모리에 저장
+//		fin.read(buf, orgSize);
+//
+//		fin.close();
+//
+//	for (int i = 0; i < div + 1; i++)
+//	{
+//		ofstream fout;
+//		fout.open("Test" + to_string(i+1) + ".txt", ios_base::out | ios_base::binary);
+//		if (i != div)
+//			fout.write(buf + i * fileSize, fileSize);
+//		else
+//			fout.write(buf + i * fileSize, orgSize%fileSize);
+//		fout.close();
+//	}
+//	delete[] buf;
+//}
 
 
 
