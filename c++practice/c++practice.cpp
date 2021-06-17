@@ -1,161 +1,270 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
-#include <iostream>
-#include "stopwatch.h"
-using namespace std;
-
-int brute_force(const char data[], const char pat[]);
-int kmp(const char data[], const char pat[]);
-
-int main()
-{
-	char *data = new char[100000000];
-	char *pattern = new char[100];
-	srand((unsigned)time(0));
-	cout << "데이터 입력 : ";
-	for (int i = 0; i < 100000000; i++)
-	{
-		data[i]= 'a' + rand() % 26;
-		//cout << data[i];
-	}
-
-	//char *data = new char[10000];
-	//char *pattern = new char[100];
-	//srand((unsigned)time(0));
-	//cout << "데이터 입력 : ";
-	//cin >> data;	
-		cout <<endl<< "패턴 입력 : ";
-		cin >> pattern;
-	int bn = brute_force(data, pattern);
-
-	if (bn != -1)
-		cout << bn << "번째에서 발견!"<<endl;
-	else
-		cout << "발견하지 못했습니다!"<<endl;
-	
-	int kn = kmp(data, pattern);
-	if (kn != -1)
-		cout << kn << "번째에서 발견!"<<endl;
-	else
-		cout << "발견하지 못했습니다!"<<endl;
 
 
-	delete[] data;
-	delete[] pattern;
-		return 0;
-}
+//파일 내의 모든 바이트에 5를 더하도록 해서 부호화(encoding) 하여라
+//사용자가 입력 파일 이름과 출력 파일 이름을 입력하면 입력 파일의 암호화된
+//버전을 출력 파일로 저장하는 프로그램을 작성
+//input source filename : source.txt
+//input encoding filename : encoding.txt
+//암호화된 파일으 복호화(decoding)하는 프로그램을 작성 사용자가 입력 파일
+//이름과 출력 파일 이름을 입력하면 입력 파일의 암호가 풀린 출력 파일로 저장하는
+//프로그램을 작성
 
-int kmp(const char data[], const char pat[])
-{
-	stopwatch timecheck;
-	timecheck.start();
+//#include <iostream>
+//#include <fstream>
+//#include <iomanip>
+//#include <cstdlib>
+//#include <string>
+//#include <filesystem>
+//using namespace std;
+//
+//int main()
+//{
+//	cout << fixed;
+//	cout << "Input source filename : ";
+//	string sourceFileName;
+//	cin >> sourceFileName;
+//
+//	cout << "Input encoding filename : ";
+//	string encodingFileName;
+//	cin >> encodingFileName;
+//
+//	ifstream fin;
+//	fin.open(sourceFileName, ios_base::in | ios_base::binary);
+//	long long orgSize;
+//
+//	fin.seekg(0, fin.end);			//끝으로가서
+//	orgSize = fin.tellg();			//파일 길이 알아오기
+//	cout << "Entire file size : " << orgSize << endl;
+//	fin.seekg(0, ios::beg);		//다시 처음으로와서
+//
+//	char **ptr = nullptr;		//전체크기*6 메모리에 저장 or 2중으로?
+//	ptr = new char*[orgSize];
+//	for (int i = 0; i <orgSize ; i++)
+//		ptr[i] = new char[6];
+//
+//	for(int i =0; i<orgSize; i++)
+//	fin.read(ptr[i], 1);
+//		fin.close();
+//
+//	ofstream fout;
+//	fout.open(encodingFileName, ios_base::out | ios_base::binary);
+//	for (int i = 0; i < orgSize; i++)
+//	{
+//		fout.write(ptr[i], 6);
+//	}
+//	fout.close();
+//
+//
+//	for (int i = 0; i < orgSize; i++)
+//		delete[] ptr[i];
+//	delete[] ptr;
+//
+//	////////////////////////복호화//////////////////////////////
+//	cout << "Input encoded filename : ";
+//	string encodedFileName;
+//	cin >> encodedFileName;
+//
+//	cout << "Input decoding filename : ";
+//	string decodingFileName;
+//	cin >> decodingFileName;
+//
+//	ifstream fin;
+//	fin.open(encodedFileName, ios_base::in | ios_base::binary);
+//	long long orgSize;
+//
+//	fin.seekg(0, fin.end);			//끝으로가서
+//	orgSize = fin.tellg();			//파일 길이 알아오기
+//	cout << "Entire file size : " << orgSize << endl;
+//	fin.seekg(0, ios::beg);		//다시 처음으로와서
+//
+//	char **buf = nullptr;		
+//	buf = new char*[orgSize/6];
+//	for (int i = 0; i < orgSize/6; i++)
+//		buf[i] = new char[6];
+//
+//	for (int i = 0; i < orgSize; i++)
+//		fin.read(buf[i], 6);
+//	fin.close();
+//
+//	ofstream fout;
+//	fout.open(encodingFileName, ios_base::out | ios_base::binary);
+//	for (int i = 0; i < orgSize; i++)
+//	{
+//		fout.write(buf[i], 1);
+//	}
+//	fout.close();
+//
+//
+//	for (int i = 0; i < orgSize; i++)
+//		delete[] buf[i];
+//	delete[] buf;
+//
+//	return 0;
+//}
 
-	int i = 0;
-	int dat_size = strlen(data);
-	int pat_size = strlen(pat);
 
-	for (i; i < dat_size; i++)
-	{
-		int cnt = 0; //반복되는 경우 넘기기 위한 카운트
-		for (int j = 0; j < pat_size; j++)
-		{
-			
-			if (pat[j] != data[i + j])
-			{
-				///////////////////출력부////////////////
-				//cout << data << endl;
-				//for (int k = 0; k < i + j; k++)
-				//	cout << " ";
-				//cout << "|" << endl;
-				//for (int k = 0; k < i; k++)
-				//	cout << " ";
-				//cout << pat << endl;
-				//cout << endl;
-				///////////////////////////////////////
-				if(cnt!=0)
-				i += cnt-1; //불일치하는경우 카운트를 더해서 건너뜀/ 다음 i++고려해서 -1;
-				goto CON;
-			}
-			else
-			{
-				cnt++;	//일치하는 경우 카운트++;
-				//////////////출력부////////////////
-				//cout << data << endl;
-				//for (int k = 0; k < i + j; k++)
-				//	cout << " ";
-				//cout << "+" << endl;
-				//for (int k = 0; k < i; k++)
-				//	cout << " ";
-				//cout << pat << endl;
-				//cout << endl;
-				//////////////////////////////////
-			}
 
-		}
-		break;
-	CON:continue;
 
-	}
-	timecheck.stop();
-	cout << "kmp 총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
-	if (i < dat_size - 1)
 
-		return i + 1;
-	else
-		return -1;
-}
 
-int brute_force(const char data[], const char pat[])
-{
-	stopwatch timecheck;
-timecheck.start();
-
-	int i = 0;
-	int dat_size = strlen(data);
-	int pat_size = strlen(pat);
-
-		for (i; i < dat_size; i++)
-	{
-			for (int j = 0; j < pat_size; j++)
-			{
-				if (pat[j] != data[i + j])
-				{
-					//cout << data << endl;
-					//for (int k = 0; k < i + j; k++)
-					//	cout << " ";
-					//cout << "|"<<endl;
-					//for (int k = 0; k < i; k++)
-					//	cout << " ";
-					//cout << pat << endl;
-					//cout << endl;
-					goto CON;
-				}
-				else
-				{
-					//cout << data << endl;
-					//for (int k = 0; k < i + j; k++)
-					//	cout << " ";
-					//cout << "+" << endl;
-					//for (int k = 0; k < i ; k++)
-					//	cout << " ";
-					//cout << pat << endl;
-					//cout << endl;
-				}
-
-			}
-			break;
-		CON:continue;
-	
-
-	}
-		timecheck.stop();
-cout << "brute_force 총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
-		if (i < dat_size - 1)
-
-			return i + 1;
-		else
-			return -1;
-}
+//#include <iostream>
+//#include "stopwatch.h"
+//using namespace std;
+//
+//int brute_force(const char data[], const char pat[]);
+//int kmp(const char data[], const char pat[]);
+//
+//int main()
+//{
+//	char *data = new char[100000000];
+//	char *pattern = new char[100];
+//	srand((unsigned)time(0));
+//	cout << "데이터 입력 : ";
+//	for (int i = 0; i < 100000000; i++)
+//	{
+//		data[i]= 'a' + rand() % 26;
+//		//cout << data[i];
+//	}
+//
+//	//char *data = new char[10000];
+//	//char *pattern = new char[100];
+//	//srand((unsigned)time(0));
+//	//cout << "데이터 입력 : ";
+//	//cin >> data;	
+//		cout <<endl<< "패턴 입력 : ";
+//		cin >> pattern;
+//	int bn = brute_force(data, pattern);
+//
+//	if (bn != -1)
+//		cout << bn << "번째에서 발견!"<<endl;
+//	else
+//		cout << "발견하지 못했습니다!"<<endl;
+//	
+//	int kn = kmp(data, pattern);
+//	if (kn != -1)
+//		cout << kn << "번째에서 발견!"<<endl;
+//	else
+//		cout << "발견하지 못했습니다!"<<endl;
+//
+//
+//	delete[] data;
+//	delete[] pattern;
+//		return 0;
+//}
+//
+//int kmp(const char data[], const char pat[])
+//{
+//	stopwatch timecheck;
+//	timecheck.start();
+//
+//	int i = 0;
+//	int dat_size = strlen(data);
+//	int pat_size = strlen(pat);
+//
+//	for (i; i < dat_size; i++)
+//	{
+//		int cnt = 0; //반복되는 경우 넘기기 위한 카운트
+//		for (int j = 0; j < pat_size; j++)
+//		{
+//			
+//			if (pat[j] != data[i + j])
+//			{
+//				///////////////////출력부////////////////
+//				//cout << data << endl;
+//				//for (int k = 0; k < i + j; k++)
+//				//	cout << " ";
+//				//cout << "|" << endl;
+//				//for (int k = 0; k < i; k++)
+//				//	cout << " ";
+//				//cout << pat << endl;
+//				//cout << endl;
+//				///////////////////////////////////////
+//				if(cnt!=0)
+//				i += cnt-1; //불일치하는경우 카운트를 더해서 건너뜀/ 다음 i++고려해서 -1;
+//				goto CON;
+//			}
+//			else
+//			{
+//				cnt++;	//일치하는 경우 카운트++;
+//				//////////////출력부////////////////
+//				//cout << data << endl;
+//				//for (int k = 0; k < i + j; k++)
+//				//	cout << " ";
+//				//cout << "+" << endl;
+//				//for (int k = 0; k < i; k++)
+//				//	cout << " ";
+//				//cout << pat << endl;
+//				//cout << endl;
+//				//////////////////////////////////
+//			}
+//
+//		}
+//		break;
+//	CON:continue;
+//
+//	}
+//	timecheck.stop();
+//	cout << "kmp 총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
+//	if (i < dat_size - 1)
+//
+//		return i + 1;
+//	else
+//		return -1;
+//}
+//
+//int brute_force(const char data[], const char pat[])
+//{
+//	stopwatch timecheck;
+//timecheck.start();
+//
+//	int i = 0;
+//	int dat_size = strlen(data);
+//	int pat_size = strlen(pat);
+//
+//		for (i; i < dat_size; i++)
+//	{
+//			for (int j = 0; j < pat_size; j++)
+//			{
+//				if (pat[j] != data[i + j])
+//				{
+//					//cout << data << endl;
+//					//for (int k = 0; k < i + j; k++)
+//					//	cout << " ";
+//					//cout << "|"<<endl;
+//					//for (int k = 0; k < i; k++)
+//					//	cout << " ";
+//					//cout << pat << endl;
+//					//cout << endl;
+//					goto CON;
+//				}
+//				else
+//				{
+//					//cout << data << endl;
+//					//for (int k = 0; k < i + j; k++)
+//					//	cout << " ";
+//					//cout << "+" << endl;
+//					//for (int k = 0; k < i ; k++)
+//					//	cout << " ";
+//					//cout << pat << endl;
+//					//cout << endl;
+//				}
+//
+//			}
+//			break;
+//		CON:continue;
+//	
+//
+//	}
+//		timecheck.stop();
+//cout << "brute_force 총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
+//		if (i < dat_size - 1)
+//
+//			return i + 1;
+//		else
+//			return -1;
+//}
 
 
 
