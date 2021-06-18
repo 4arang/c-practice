@@ -1,9 +1,2 @@
 ﻿  c++practice.cpp
-d:\c+++\c++practice\c++practice.cpp(41): warning C4244: '초기화 중': '__int64'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\c+++\c++practice\c++practice.cpp(71): error C2086: 'std::ifstream fin': 재정의
-  d:\c+++\c++practice\c++practice.cpp(31): note: 'fin' 선언을 참조하십시오.
-d:\c+++\c++practice\c++practice.cpp(73): error C2086: '__int64 orgSize': 재정의
-  d:\c+++\c++practice\c++practice.cpp(33): note: 'orgSize' 선언을 참조하십시오.
-d:\c+++\c++practice\c++practice.cpp(81): warning C4244: '초기화 중': '__int64'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-d:\c+++\c++practice\c++practice.cpp(89): error C2086: 'std::ofstream fout': 재정의
-  d:\c+++\c++practice\c++practice.cpp(49): note: 'fout' 선언을 참조하십시오.
+  c++practice.vcxproj -> D:\c+++\Debug\c++practice.exe

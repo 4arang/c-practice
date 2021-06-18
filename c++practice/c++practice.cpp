@@ -1,5 +1,260 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
+#include <iostream>
+#include "stopwatch.h"
+using namespace std;
+
+int brute_force(const char data[], const char pat[]);
+int kmp(const char data[], const char pat[]);
+int BoyerMoore(const char data[], const char pat[]);
+
+int main()
+{
+	char *data = new char[100000000];
+	char *pattern = new char[100];
+	srand((unsigned)time(0));
+	cout << "데이터 입력 : ";
+	for (int i = 0; i < 100000000; i++)
+	{
+		data[i]= 'a' + rand() % 26;
+		//cout << data[i];
+	}
+
+	//char *data = new char[10000];
+	//char *pattern = new char[100];
+	//srand((unsigned)time(0));
+	//cout << "데이터 입력 : ";
+	//cin >> data;
+
+		cout <<endl<< "패턴 입력 : ";
+		cin >> pattern;
+	int bn = brute_force(data, pattern);
+
+	if (bn != -1)
+		cout << bn << "번째에서 발견!"<<endl;
+	else
+		cout << "발견하지 못했습니다!"<<endl;
+	
+	int kn = kmp(data, pattern);
+	if (kn != -1)
+		cout << kn << "번째에서 발견!"<<endl;
+	else
+		cout << "발견하지 못했습니다!"<<endl;
+
+	int bmn = BoyerMoore(data, pattern);
+	if (bmn != -1)
+		cout << bmn << "번째에서 발견!" << endl;
+	else
+		cout << "발견하지 못했습니다!" << endl;
+
+	delete[] data;
+	delete[] pattern;
+		return 0;
+}
+int BoyerMoore(const char data[], const char pat[])
+{
+	stopwatch timecheck;
+	timecheck.start();
+	int dat_size = strlen(data);
+	int pat_size = strlen(pat);
+	int i = pat_size - 1;
+	int icnt = 0;
+
+	while (1)
+	{
+
+		int dcnt = 0;		//데이터 얼마나 넘길지 카운트
+
+		for (int j = pat_size-1-icnt; j >= 0; j--)	//패턴 뒤에서부터 비교
+		{
+			if (pat[j] != data[i])		//틀리면 카운트 ++
+			{
+				/////////////출력부////////////////
+				//cout << data << endl;
+				//for (int k = 0; k < i; k++)
+				//	cout << " ";
+				//cout << "|" << endl;
+				//for (int k = 0; k < i-j; k++)
+				//	cout << " ";
+				//cout << pat << endl;
+				//cout << endl;
+				/////////////////////////////////
+				dcnt++;
+			}
+			else if (j != pat_size - 1 && pat[j] == data[i] && dcnt>0)	//맞았는데 패턴 마지막이 아니면서 카운트가 있다면
+			{
+				//////////////출력부////////////////
+				//cout << data << endl;
+				//for (int k = 0; k < i; k++)
+				//	cout << " ";
+				//cout << "o" << endl;
+				//for (int k = 0; k < i - j; k++)
+				//	cout << " ";
+				//cout << pat << endl;
+				//cout << endl;
+				//////////////////////////////////
+				i += dcnt;
+				i += icnt;
+				goto CON;
+			}
+			else
+			{
+				//////////////출력부////////////////
+				//cout << data << endl;
+				//for (int k = 0; k < i ; k++)
+				//	cout << " ";
+				//cout << "+" << endl;
+				//for (int k = 0; k < i -j; k++)
+				//	cout << " ";
+				//cout << pat << endl;
+				//cout << endl;
+				//////////////////////////////////
+				i--;	// 패턴과 일치하는 경우에 데이터의 앞부분과 비교
+				icnt++; // 패턴을 찾지 못할경우 대비
+				continue;
+			}
+		}
+			i += dcnt;
+			i += icnt; //i-- 손해본 것 복구
+			icnt = 0; //icnt 초기화
+		if (i > dat_size || dcnt == 0) break;
+	CON: continue;
+	}
+
+	timecheck.stop();
+	cout << "Boyer-Moore 총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
+	if (i < dat_size)
+		return i -1;
+	else
+		return -1;
+}
+int kmp(const char data[], const char pat[])
+{
+	stopwatch timecheck;
+	timecheck.start();
+
+	int i = 0;
+	int dat_size = strlen(data);
+	int pat_size = strlen(pat);
+
+	for (i; i < dat_size; i++)
+	{
+		int cnt = 0; //반복되는 경우 넘기기 위한 카운트
+		for (int j = 0; j < pat_size; j++)
+		{
+			
+			if (pat[j] != data[i + j])
+			{
+				///////////////////출력부////////////////
+				//cout << data << endl;
+				//for (int k = 0; k < i + j; k++)
+				//	cout << " ";
+				//cout << "|" << endl;
+				//for (int k = 0; k < i; k++)
+				//	cout << " ";
+				//cout << pat << endl;
+				//cout << endl;
+				///////////////////////////////////////
+				if(cnt!=0)
+				i += cnt-1; //불일치하는경우 카운트를 더해서 건너뜀/ 다음 i++고려해서 -1;
+				goto CON;
+			}
+			else
+			{
+				cnt++;	//일치하는 경우 카운트++;
+				//////////////출력부////////////////
+				//cout << data << endl;
+				//for (int k = 0; k < i + j; k++)
+				//	cout << " ";
+				//cout << "+" << endl;
+				//for (int k = 0; k < i; k++)
+				//	cout << " ";
+				//cout << pat << endl;
+				//cout << endl;
+				//////////////////////////////////
+			}
+
+		}
+		break;
+	CON:continue;
+
+	}
+	timecheck.stop();
+	cout << "kmp 총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
+	if (i < dat_size - 1)
+
+		return i + 1;
+	else
+		return -1;
+}
+
+int brute_force(const char data[], const char pat[])
+{
+	stopwatch timecheck;
+timecheck.start();
+
+	int i = 0;
+	int dat_size = strlen(data);
+	int pat_size = strlen(pat);
+
+		for (i; i < dat_size; i++)
+	{
+			for (int j = 0; j < pat_size; j++)
+			{
+				if (pat[j] != data[i + j])
+				{
+					//cout << data << endl;
+					//for (int k = 0; k < i + j; k++)
+					//	cout << " ";
+					//cout << "|"<<endl;
+					//for (int k = 0; k < i; k++)
+					//	cout << " ";
+					//cout << pat << endl;
+					//cout << endl;
+					goto CON;
+				}
+				else
+				{
+					//cout << data << endl;
+					//for (int k = 0; k < i + j; k++)
+					//	cout << " ";
+					//cout << "+" << endl;
+					//for (int k = 0; k < i ; k++)
+					//	cout << " ";
+					//cout << pat << endl;
+					//cout << endl;
+				}
+
+			}
+			break;
+		CON:continue;
+	
+
+	}
+		timecheck.stop();
+cout << "brute_force 총 걸린 시간 " << timecheck.getElapsedTime() << "ms" << endl;
+		if (i < dat_size - 1)
+
+			return i + 1;
+		else
+			return -1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //파일 내의 모든 바이트에 5를 더하도록 해서 부호화(encoding) 하여라
