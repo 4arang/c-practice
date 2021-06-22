@@ -10,11 +10,11 @@ int BoyerMoore(const char data[], const char pat[]);
 
 int main()
 {
-	char *data = new char[100000000];
+	char *data = new char[10000000];
 	char *pattern = new char[100];
 	srand((unsigned)time(0));
 	cout << "데이터 입력 : ";
-	for (int i = 0; i < 100000000; i++)
+	for (int i = 0; i < 10000000; i++)
 	{
 		data[i]= 'a' + rand() % 26;
 		//cout << data[i];
