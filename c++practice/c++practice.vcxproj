@@ -155,7 +155,11 @@
     <ClCompile Include="stopwatch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stopwatch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="c++practice.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

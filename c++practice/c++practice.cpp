@@ -2,64 +2,243 @@
 
 #include <iostream>
 #include <string>
-//입력순서와 상관없이 번호 순서대로 정렬된 리스트를 구현하는 프로그램을 작성하라.
-//리스트 초기화 /노드추가-제일 앞에 추가, 맨 뒤에 추가, 노드 사이에 추가 / 노드 삭제-제일앞,맨뒤,노드사이
-//검색-번호받아서 번호이름출력 / 리스트전체데이터 ㄹ출력
+
 using namespace std;
 
-class student
+class DFS
 {
 public:
 	int num;
 	string name;
-	student *next;
-	student *prev;
+	DFS *right;
+	DFS *left;
+	DFS *up;
 };
+//전역 변수
+DFS *head = NULL;
+int cnt = 0;
 
-student *head, *tail=NULL;
 
+void menu();
+void insert();
+void substract();
+void search();
+void print();
+void printTree();
 
-	void menu();
-	void insert();
-	void print();
-	void search();
-	void Initialize();
-	void substract();
-
-	int cnt = 0;
-	int avg = 0;
-
+void compare1(DFS *pa, DFS *ch);
+void deleteData(DFS *list);
+void print1(DFS *list);
+void search1(DFS *pa, int n);
+DFS *search2(DFS*pa, int n);
+void subs(DFS *pa, int n);
+DFS *subs2(DFS *find);
 
 int main()
 {
-	Initialize(); //초기화
-	menu();
-	//메모리 해제하기
-	student *list = head;
-	while (list->next)
-	{
-		list = list->next;
-		delete list->prev;
-	}
-	delete list;
+		menu();
+
+		//할당 해제
+		DFS *list = head;
+		deleteData(list);
+		delete list;
+
+
 	return 0;
 }
 
+void insert()
+{
+	DFS *dfs = NULL;
+	dfs = new DFS();
+
+	cout << "삽입하는 데이터를 입력하세요." << endl;
+
+	cout << "번호 : ";
+	cin >> dfs->num;
+	cout << "이름 : ";
+	cin >> dfs->name;
+
+		if (head == NULL )
+		{
+		head = dfs; //처음일경우
+		cout << head->num << " " << head->name<<endl;
+		}
+		else
+		{
+			compare1(head, dfs); //부모 노드와 자식노드 관계 비교
+		}
+		cnt++;
+}
+void compare1(DFS *pa, DFS *ch) //부모 자식
+{
+	if (ch->num < pa->num) //더 작을경우
+	{
+		if (pa->left == NULL)//왼쪽이 NULL이라면 삽입
+		{
+			pa->left = ch;
+			ch->up = pa;
+			cout << pa->left->num << " " << pa->left->name << endl;
+		}
+		else //왼쪽에 자식 노드가 있는 경우에는 다시 찾기
+			compare1(pa->left, ch);
+	}
+	else if (ch->num > pa->num)//더 클 경우
+	{
+		if (pa->right == NULL)//오른쪽이 NULL이라면 삽입
+		{
+			pa->right = ch;
+			ch->up = pa;
+			cout << pa->right->num << " " << pa->right->name << endl;
+		}
+		else//자식노드가 있다면 하위에서 다시 찾기
+			compare1(pa->right, ch);
+	}
+}
+void substract()
+{
+	int n;
+	cout << "삭제하는 데이터를 입력하세요.\n" << "번호 : ";
+	cin >> n;
+	subs(head, n);
+	cnt--;
+}
+
+DFS *subs2(DFS *find)		//왼쪽트리에서 가장 큰 값을 찾기위함
+{
+	if (find->right != NULL) //오른쪽에 값이 있으면
+		subs2(find->right); //다시 찾으러 ㄱㄱ
+	else //없으면 너 리턴
+		return find;
+}
+void subs(DFS *pa, int n)
+{
+	DFS *find;
+		find = search2(pa, n); //해당 위치 찾기
+
+	if (find->left == NULL && find->right == NULL)//해당 노드 자식이 없는경우
+	{
+		if (find->num < find->up->num)	//부모보다 작으면 왼쪽연결끊기
+			find->up->left == NULL;
+		else
+			find->up->right == NULL; //부모보다 크면 오른쪽연결 끊기
+	}
+	else if (find->left != NULL && find->right != NULL)//해당 노드 자식이 2개인경우
+	{
+		DFS *find2 = subs2(find->left); //자식중 가장 큰 값
+		if (find2->up->num != find->num)//바로 아래 자식이 아니었다면
+		{
+			if (find2->left != NULL)//자식이 있었다면
+			{
+				find2->up->right = find2->left; //다른 자식 가리키기
+				find2->left->up = find2->up;
+			}
+
+			find2->up = find->up;
+			if (find->up->left->num == find->num) //왼쪽자식이었으면
+				find->up->left = find2;
+			else
+				find->up->right = find2;
+
+			find->left->up = find2;
+			find->right->up = find2;
+			find2->left = find->left;
+			find2->right = find->right;
+
+		}
+	
+	}
+	else //해당 노드 자식이 1개인 경우
+	{
+		if (find->left != NULL) //왼쪽자식있는경우 부모가 여기로 연결
+		{
+			if (find->up->left->num == find->num) //왼쪽자식이었으면
+				find->up->left = find->left;//왼쪽으로연결
+			else
+				find->up->right = find->left;
+		}
+		else//오른쪽으로 연결
+		{
+			if (find->up->left->num == find->num) //왼쪽자식이었으면
+				find->up->left = find->right;//왼쪽으로연결
+			else
+				find->up->right = find->right;
+		}
+	}
+	delete find;
+}
+DFS *search2(DFS*pa,int n) {
+	if (n < pa->num) //작은값일경우
+		search2(pa->left, n);
+	else if (n > pa->num)//큰값일경우
+		search2(pa->right, n);
+	else if (pa->num == NULL)//없는 경우
+		cout << "해당 데이터가 존재하지 않습니다." << endl;
+	else //일치하는경우
+		return pa;
+}
+void search()
+{
+	int n;
+	string Name;
+	
+	cout << "검색하는 데이터를 입력하세요.\n" << "번호 : ";
+	cin >> n;
+	if (head->num != n)
+		search1(head, n);
+	else
+	{
+		Name = head->name;
+		cout << "번호 : " << n << ", 이름 : " << Name << endl;
+	}
+}
+void search1(DFS *pa, int n)
+{
+	if (n < pa->num) //작은값일경우
+		search1(pa->left, n);
+	else if (n > pa->num)//큰값일경우
+		search1(pa->right, n);
+	else if (pa->num == NULL)//없는 경우
+		cout << "해당 데이터가 존재하지 않습니다." << endl;
+	else //일치하는경우
+		cout<<"번호 : "<<pa->num<<", 이름 : "<<pa->name<<endl;
+}
+void print()
+{
+	cout << "[모든 노드 출력]" << endl;
+	print1(head);
+}
+void print1(DFS *list)
+{
+	if (list != NULL)
+	{
+		print1(list->left);
+		cout << list->num << "번 " << list->name << endl;
+		print1(list->right);
+	}
+	else {}
+}
+void deleteData(DFS *list)
+{
+	if (list != NULL) {
+		delete list->right;
+		delete list->left;
+		deleteData(list->left);
+		deleteData(list->right);
+	}
+}
 
 void menu()
 {
-
-	int n=1;
+	int n = 1;
 
 	while (n != 0)
 	{
-		cout <<endl<< "메뉴 선택 : " << endl << "1. 학생 추가" << endl << "2. 학생 삭제" << endl <<
-			"3. 학생 검색" << endl << "4.전체 출력" << endl << "9.리스트 초기화" << endl << "0.종료\n" << endl;
+		cout << endl << "(1)삽입 (2)삭제 (3)검색 (4)출력 (0)종료 : ";
 		cin >> n;
 		switch (n)
 		{
 		case 1:
-
 			insert();
 			break;
 		case 2:
@@ -67,181 +246,534 @@ void menu()
 			break;
 		case 3:
 			search();
-				break; 
+			break;
 		case 4:
 			print();
 			break;
-		case 9:
-			Initialize();
-			break;
-		case 0: 
+		case 0:
 			break;
 		default: cout << "유효한 숫자를 입력하세요" << endl;
 		}
 	}
 }
 
-void insert()
+void printTree()
 {
 	
-	student *stu = NULL;
-	stu = new student();
-	cout << "학생 번호 : ";
-	cin >> stu->num;
-	cout << "학생 이름 : ";
-	cin >> stu->name;
-
-
-
-
-	if (head == NULL )
-	{
-		head ->next= stu; //처음일경우 그대로
-
-		stu->next = tail;
-		tail->prev = stu;
-	}
-	else if (stu->num < head->next->num) //head보다 작은경우
-	{
-		head ->next->prev=stu;
-		stu->next = head->next;
-		head->next = stu;
-	}
-	else if (stu->num>tail->prev->num)
-	{
-		tail->next = stu; //마지막 번호일 경우 
-
-		stu->next = tail;
-		stu->prev = tail->prev;
-		tail->prev->next = stu;
-		tail->prev = stu;
-	}
-	else { //중간값이 들어온 경우
-		student *list;
-		if (stu->num < avg/cnt)		//중앙값보다 작을경우 앞에서부터 찾는다 
-		{
-			for (list = head->next; list != tail; list = list->next)
-			{
-				if (stu->num < list->num) //더 큰값을 발견한 경우 그 전단계에 삽입
-				{
-					stu->prev = list->prev;
-					stu->next = list;
-					list->prev->next = stu;
-					list->prev = stu;
-					break;
-				}
-			}
-		}
-		else
-		{
-			for (list = tail->prev; list != head; list = list->prev)
-			{
-				if (stu->num > list->num) //더 작은 값을 발견한 경우 그 다음단계에 삽입
-				{
-					stu->prev = list;
-					stu->next = list->next;
-					list->next->prev = stu;
-					list->next = stu;
-
-					break;
-				}
-			}
-		}
-	}
-	avg += stu->num;
-	cnt++;
 }
 
-void print()
-{
-	student *list = 0;
-	for (list = head->next; list != tail; list = list->next)
-	{
-		cout << list->num << "번 " << list->name << endl;
-	}
-}
-void Initialize()
-{
-	head = new student;
-	tail = new student;
-	head->next = tail;
-	tail->prev = head;
-	head->prev = NULL;
-	tail->next = NULL;
-}
-void search()
-{
-	int n = 0;
-	cout << "학생 번호 : ";
-		cin >> n;
-		student *stu;
-		if (n < avg/cnt)		//중앙값보다 작을경우 앞에서부터 찾는다 
-		{
-			for (stu = head->next; stu != tail; stu = stu->next)
-			{
-				if (stu->num == n)
-				{
-					cout << stu->num << "번 " << stu->name << endl;
-					return;
-				}
-			}
-		}
-		else
-		{
-			for (stu = tail->prev; stu != head; stu = stu->prev)
-			{
-				if (stu->num == n)
-				{
-					cout << stu->num << "번 " << stu->name << endl;
-					return;
-				}
-			}
-		}
-		cout << "해당 번호가 없습니다." << endl;
-}
-void substract()
-{
-	
-	int n;
-	cout << "학생 번호 : ";
-	cin >> n;
-	if (head != NULL)
-	{
-		student *stu;
-		if (n < avg/cnt)		//중앙값보다 작을경우 앞에서부터 찾는다 
-		{
-			for (stu = head->next; stu != tail; stu = stu->next)
-			{
-				if (stu->num == n)
-				{
-					stu->prev->next = stu->next;
-					stu->next->prev = stu->prev;
-					delete stu;
-					cnt--;
-					avg -= stu->num;
-					return;
-				}
-			}
-		}
-		else
-		{
-			for (stu = tail->prev; stu != head; stu = stu->prev)
-			{
-				if (stu->num == n)
-				{
-					stu->prev->next = stu->next;
-					stu->next->prev = stu->prev;
-					delete stu;
-					cnt--;
-					avg -= stu->num;
-					return;
-				}
-			}
-		}
-		cout << "해당 번호가 없습니다." << endl;
-	}
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//#define _CRT_SECURE_NO_WARNINGS
+//
+//#include <iostream>
+//#include <string>
+//
+//using namespace std;
+//
+//class DFS
+//{
+//public:
+//	int num;
+//	string name;
+//	DFS *right;
+//	DFS *left;
+//	DFS *up;
+//};
+//DFS *head = NULL;
+//
+//void menu();
+//void insert();
+//void substract();
+//void search();
+//void print();
+//void printTree();
+//
+//void compare1(DFS *pa, DFS *ch);
+//void deleteData(DFS *list);
+//void print1(DFS *list);
+//void search1(DFS *pa, int n);
+//DFS *search2(DFS*pa, int n);
+//void subs(DFS *pa, int n);
+//DFS *subs2(DFS *find);
+//
+//int main()
+//{
+//	menu();
+//
+//	//할당 해제
+//	DFS *list = head;
+//	deleteData(list);
+//	delete list;
+//
+//	return 0;
+//}
+//
+//void insert()
+//{
+//	DFS *dfs = NULL;
+//	dfs = new DFS();
+//
+//	cout << "삽입하는 데이터를 입력하세요." << endl;
+//
+//	cout << "번호 : ";
+//	cin >> dfs->num;
+//	cout << "이름 : ";
+//	cin >> dfs->name;
+//
+//	if (head == NULL)
+//	{
+//		head = dfs; //처음일경우
+//		cout << head->num << " " << head->name << endl;
+//	}
+//	else
+//	{
+//		compare1(head, dfs); //부모 노드와 자식노드 관계 비교
+//	}
+//
+//}
+//void compare1(DFS *pa, DFS *ch) //부모 자식
+//{
+//	if (ch->num < pa->num) //더 작을경우
+//	{
+//		if (pa->left == NULL)//왼쪽이 NULL이라면 삽입
+//		{
+//			pa->left = ch;
+//			ch->up = pa;
+//			cout << pa->left->num << " " << pa->left->name << endl;
+//		}
+//		else //왼쪽에 자식 노드가 있는 경우에는 다시 찾기
+//			compare1(pa->left, ch);
+//	}
+//	else if (ch->num > pa->num)//더 클 경우
+//	{
+//		if (pa->right == NULL)//오른쪽이 NULL이라면 삽입
+//		{
+//			pa->right = ch;
+//			ch->up = pa;
+//			cout << pa->right->num << " " << pa->right->name << endl;
+//		}
+//		else//자식노드가 있다면 하위에서 다시 찾기
+//			compare1(pa->right, ch);
+//	}
+//}
+//void substract()
+//{
+//	int n;
+//	cout << "삭제하는 데이터를 입력하세요.\n" << "번호 : ";
+//	cin >> n;
+//	subs(head, n);
+//}
+//
+//DFS *subs2(DFS *find)		//왼쪽트리에서 가장 큰 값을 찾기위함
+//{
+//	if (find->right != NULL) //오른쪽에 값이 있으면
+//		subs2(find->right); //다시 찾으러 ㄱㄱ
+//	else //없으면 너 리턴
+//		return find;
+//}
+//void subs(DFS *pa, int n)
+//{
+//	DFS *find;
+//	find = search2(pa, n); //해당 위치 찾기
+//
+//	if (find->left == NULL && find->right == NULL)//해당 노드 자식이 없는경우
+//	{
+//		if (find->num < find->up->num)	//부모보다 작으면 왼쪽연결끊기
+//			find->up->left == NULL;
+//		else
+//			find->up->right == NULL; //부모보다 크면 오른쪽연결 끊기
+//	}
+//	else if (find->left != NULL && find->right != NULL)//해당 노드 자식이 2개인경우
+//	{
+//		DFS *find2 = subs2(find->left); //자식중 가장 큰 값
+//		if (find2->up->num != find->num)//바로 아래 자식이 아니었다면
+//		{
+//			if (find2->left != NULL)//자식이 있었다면
+//			{
+//				find2->up->right = find2->left; //다른 자식 가리키기
+//				find2->left->up = find2->up;
+//			}
+//
+//			find2->up = find->up;
+//			if (find->up->left->num == find->num) //왼쪽자식이었으면
+//				find->up->left = find2;
+//			else
+//				find->up->right = find2;
+//
+//			find->left->up = find2;
+//			find->right->up = find2;
+//			find2->left = find->left;
+//			find2->right = find->right;
+//
+//		}
+//
+//	}
+//	else //해당 노드 자식이 1개인 경우
+//	{
+//		if (find->left != NULL) //왼쪽자식있는경우 부모가 여기로 연결
+//		{
+//			if (find->up->left->num == find->num) //왼쪽자식이었으면
+//				find->up->left = find->left;//왼쪽으로연결
+//			else
+//				find->up->right = find->left;
+//		}
+//		else//오른쪽으로 연결
+//		{
+//			if (find->up->left->num == find->num) //왼쪽자식이었으면
+//				find->up->left = find->right;//왼쪽으로연결
+//			else
+//				find->up->right = find->right;
+//		}
+//	}
+//	delete find;
+//}
+//DFS *search2(DFS*pa, int n) {
+//	if (n < pa->num) //작은값일경우
+//		search2(pa->left, n);
+//	else if (n > pa->num)//큰값일경우
+//		search2(pa->right, n);
+//	else if (pa->num == NULL)//없는 경우
+//		cout << "해당 데이터가 존재하지 않습니다." << endl;
+//	else //일치하는경우
+//		return pa;
+//}
+//void search()
+//{
+//	int n;
+//	string Name;
+//
+//	cout << "검색하는 데이터를 입력하세요.\n" << "번호 : ";
+//	cin >> n;
+//	if (head->num != n)
+//		search1(head, n);
+//	else
+//	{
+//		Name = head->name;
+//		cout << "번호 : " << n << ", 이름 : " << Name << endl;
+//	}
+//}
+//void search1(DFS *pa, int n)
+//{
+//	if (n < pa->num) //작은값일경우
+//		search1(pa->left, n);
+//	else if (n > pa->num)//큰값일경우
+//		search1(pa->right, n);
+//	else if (pa->num == NULL)//없는 경우
+//		cout << "해당 데이터가 존재하지 않습니다." << endl;
+//	else //일치하는경우
+//		cout << "번호 : " << pa->num << ", 이름 : " << pa->name << endl;
+//}
+//void print()
+//{
+//	cout << "[모든 노드 출력]" << endl;
+//	print1(head);
+//}
+//void print1(DFS *list)
+//{
+//	if (list != NULL)
+//	{
+//		print1(list->left);
+//		cout << list->num << "번 " << list->name << endl;
+//		print1(list->right);
+//	}
+//	else {}
+//}
+//void deleteData(DFS *list)
+//{
+//	if (list != NULL) {
+//		delete list->right;
+//		delete list->left;
+//		deleteData(list->left);
+//		deleteData(list->right);
+//	}
+//}
+//
+//void menu()
+//{
+//	int n = 1;
+//
+//	while (n != 0)
+//	{
+//		cout << endl << "(1)삽입 (2)삭제 (3)검색 (4)출력 (0)종료 : ";
+//		cin >> n;
+//		switch (n)
+//		{
+//		case 1:
+//			insert();
+//			break;
+//		case 2:
+//			substract();
+//			break;
+//		case 3:
+//			search();
+//			break;
+//		case 4:
+//			print();
+//			break;
+//		case 0:
+//			break;
+//		default: cout << "유효한 숫자를 입력하세요" << endl;
+//		}
+//	}
+//}
+
+//#include <iostream>
+//#include <string>
+////입력순서와 상관없이 번호 순서대로 정렬된 리스트를 구현하는 프로그램을 작성하라.
+////리스트 초기화 /노드추가-제일 앞에 추가, 맨 뒤에 추가, 노드 사이에 추가 / 노드 삭제-제일앞,맨뒤,노드사이
+////검색-번호받아서 번호이름출력 / 리스트전체데이터 ㄹ출력
+//using namespace std;
+//
+//class student
+//{
+//public:
+//	int num;
+//	string name;
+//	student *next;
+//	student *prev;
+//};
+//
+//student *head, *tail=NULL;
+//
+//
+//	void menu();
+//	void insert();
+//	void print();
+//	void search();
+//	void Initialize();
+//	void substract();
+//
+//	int cnt = 0;
+//	int avg = 0;
+//
+//
+//int main()
+//{
+//	Initialize(); //초기화
+//	menu();
+//	//메모리 해제하기
+//	student *list = head;
+//	while (list->next)
+//	{
+//		list = list->next;
+//		delete list->prev;
+//	}
+//	delete list;
+//	return 0;
+//}
+//
+//
+//void menu()
+//{
+//
+//	int n=1;
+//
+//	while (n != 0)
+//	{
+//		cout <<endl<< "메뉴 선택 : " << endl << "1. 학생 추가" << endl << "2. 학생 삭제" << endl <<
+//			"3. 학생 검색" << endl << "4.전체 출력" << endl << "9.리스트 초기화" << endl << "0.종료\n" << endl;
+//		cin >> n;
+//		switch (n)
+//		{
+//		case 1:
+//
+//			insert();
+//			break;
+//		case 2:
+//			substract();
+//			break;
+//		case 3:
+//			search();
+//				break; 
+//		case 4:
+//			print();
+//			break;
+//		case 9:
+//			Initialize();
+//			break;
+//		case 0: 
+//			break;
+//		default: cout << "유효한 숫자를 입력하세요" << endl;
+//		}
+//	}
+//}
+//
+//void insert()
+//{
+//	
+//	student *stu = NULL;
+//	stu = new student();
+//	cout << "학생 번호 : ";
+//	cin >> stu->num;
+//	cout << "학생 이름 : ";
+//	cin >> stu->name;
+//
+//
+//
+//
+//	if (head == NULL )
+//	{
+//		head ->next= stu; //처음일경우 그대로
+//
+//		stu->next = tail;
+//		tail->prev = stu;
+//	}
+//	else if (stu->num < head->next->num) //head보다 작은경우
+//	{
+//		head ->next->prev=stu;
+//		stu->next = head->next;
+//		head->next = stu;
+//	}
+//	else if (stu->num>tail->prev->num)
+//	{
+//		tail->next = stu; //마지막 번호일 경우 
+//
+//		stu->next = tail;
+//		stu->prev = tail->prev;
+//		tail->prev->next = stu;
+//		tail->prev = stu;
+//	}
+//	else { //중간값이 들어온 경우
+//		student *list;
+//		if (stu->num < avg/cnt)		//중앙값보다 작을경우 앞에서부터 찾는다 
+//		{
+//			for (list = head->next; list != tail; list = list->next)
+//			{
+//				if (stu->num < list->num) //더 큰값을 발견한 경우 그 전단계에 삽입
+//				{
+//					stu->prev = list->prev;
+//					stu->next = list;
+//					list->prev->next = stu;
+//					list->prev = stu;
+//					break;
+//				}
+//			}
+//		}
+//		else
+//		{
+//			for (list = tail->prev; list != head; list = list->prev)
+//			{
+//				if (stu->num > list->num) //더 작은 값을 발견한 경우 그 다음단계에 삽입
+//				{
+//					stu->prev = list;
+//					stu->next = list->next;
+//					list->next->prev = stu;
+//					list->next = stu;
+//
+//					break;
+//				}
+//			}
+//		}
+//	}
+//	avg += stu->num;
+//	cnt++;
+//}
+//
+//void print()
+//{
+//	student *list = 0;
+//	for (list = head->next; list != tail; list = list->next)
+//	{
+//		cout << list->num << "번 " << list->name << endl;
+//	}
+//}
+//void Initialize()
+//{
+//	head = new student;
+//	tail = new student;
+//	head->next = tail;
+//	tail->prev = head;
+//	head->prev = NULL;
+//	tail->next = NULL;
+//}
+//void search()
+//{
+//	int n = 0;
+//	cout << "학생 번호 : ";
+//		cin >> n;
+//		student *stu;
+//		if (n < avg/cnt)		//중앙값보다 작을경우 앞에서부터 찾는다 
+//		{
+//			for (stu = head->next; stu != tail; stu = stu->next)
+//			{
+//				if (stu->num == n)
+//				{
+//					cout << stu->num << "번 " << stu->name << endl;
+//					return;
+//				}
+//			}
+//		}
+//		else
+//		{
+//			for (stu = tail->prev; stu != head; stu = stu->prev)
+//			{
+//				if (stu->num == n)
+//				{
+//					cout << stu->num << "번 " << stu->name << endl;
+//					return;
+//				}
+//			}
+//		}
+//		cout << "해당 번호가 없습니다." << endl;
+//}
+//void substract()
+//{
+//	
+//	int n;
+//	cout << "학생 번호 : ";
+//	cin >> n;
+//	if (head != NULL)
+//	{
+//		student *stu;
+//		if (n < avg/cnt)		//중앙값보다 작을경우 앞에서부터 찾는다 
+//		{
+//			for (stu = head->next; stu != tail; stu = stu->next)
+//			{
+//				if (stu->num == n)
+//				{
+//					stu->prev->next = stu->next;
+//					stu->next->prev = stu->prev;
+//					delete stu;
+//					cnt--;
+//					avg -= stu->num;
+//					return;
+//				}
+//			}
+//		}
+//		else
+//		{
+//			for (stu = tail->prev; stu != head; stu = stu->prev)
+//			{
+//				if (stu->num == n)
+//				{
+//					stu->prev->next = stu->next;
+//					stu->next->prev = stu->prev;
+//					delete stu;
+//					cnt--;
+//					avg -= stu->num;
+//					return;
+//				}
+//			}
+//		}
+//		cout << "해당 번호가 없습니다." << endl;
+//	}
+//
+//}
 
 
 
