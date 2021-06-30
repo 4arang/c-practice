@@ -5,227 +5,166 @@
 
 using namespace std;
 
-class DFS
+class Hash
 {
 public:
 	int num;
 	string name;
-	DFS *right;
-	DFS *left;
-	DFS *up;
+	Hash *up;
+	Hash *down;
 };
-//전역 변수
-DFS *head = NULL;
-int cnt = 0;
 
+
+Hash *arr = new Hash[13]{};
 
 void menu();
 void insert();
 void substract();
 void search();
 void print();
-void printTree();
+void compare1(Hash *pa, Hash *ch);
+void search2(Hash *pa, int n);
+void subs2(Hash *pa, int n);
 
-void compare1(DFS *pa, DFS *ch);
-void deleteData(DFS *list);
-void print1(DFS *list);
-void search1(DFS *pa, int n);
-DFS *search2(DFS*pa, int n);
-void subs(DFS *pa, int n);
-DFS *subs2(DFS *find);
 
 int main()
 {
-		menu();
-
-		//할당 해제
-		DFS *list = head;
-		deleteData(list);
-		delete list;
 
 
+	menu();
+
+			//할당 해제
+
+	delete[] arr;
 	return 0;
 }
-
 void insert()
 {
-	DFS *dfs = NULL;
-	dfs = new DFS();
-
+	Hash *hash = NULL;
+	hash = new Hash();
+	
 	cout << "삽입하는 데이터를 입력하세요." << endl;
-
 	cout << "번호 : ";
-	cin >> dfs->num;
+	cin >> hash->num;
 	cout << "이름 : ";
-	cin >> dfs->name;
+	cin >> hash->name;
 
-		if (head == NULL )
-		{
-		head = dfs; //처음일경우
-		cout << head->num << " " << head->name<<endl;
-		}
-		else
-		{
-			compare1(head, dfs); //부모 노드와 자식노드 관계 비교
-		}
-		cnt++;
+	if (arr[hash->num % 13].down == NULL) //처음들어오는 숫자
+	{
+		arr[hash->num % 13].down = hash;	//배열 바로 밑으로 보냄	 
+	}
+	else  //나중에 들어오는 숫자
+	{
+		compare1(arr[hash->num % 13].down, hash);
+	}
+
+	//cout << arr[hash->num % 13].down->name << " " << arr[hash->num % 13].down->num << endl;
 }
-void compare1(DFS *pa, DFS *ch) //부모 자식
+
+void compare1(Hash *pa, Hash *ch)
 {
-	if (ch->num < pa->num) //더 작을경우
+	if (pa->num < ch->num)  //더 큰 경우에는 다음 연결과 비교
 	{
-		if (pa->left == NULL)//왼쪽이 NULL이라면 삽입
+		if(pa->down !=NULL) //다음 연결이 있는경우에 비교
+		compare1(pa->down, ch);
+		else //없으면 바로 연결
 		{
-			pa->left = ch;
+			pa->down = ch;
 			ch->up = pa;
-			cout << pa->left->num << " " << pa->left->name << endl;
 		}
-		else //왼쪽에 자식 노드가 있는 경우에는 다시 찾기
-			compare1(pa->left, ch);
 	}
-	else if (ch->num > pa->num)//더 클 경우
+	else //작은경우에는 이전연결 끊고 거기다 집어넣기
 	{
-		if (pa->right == NULL)//오른쪽이 NULL이라면 삽입
+		if (pa->up != NULL) //pa 이전에 데이터가 있는경우
 		{
-			pa->right = ch;
-			ch->up = pa;
-			cout << pa->right->num << " " << pa->right->name << endl;
+			pa->up->down = ch; //pa 이전이 ch을 가리키고
+			ch->up = pa->up; //ch 이전이 pa 이전 가리키고
+			ch->down = pa; //ch 다음이 pa로 오게 정렬
 		}
-		else//자식노드가 있다면 하위에서 다시 찾기
-			compare1(pa->right, ch);
 	}
+
 }
+
 void substract()
 {
 	int n;
-	cout << "삭제하는 데이터를 입력하세요.\n" << "번호 : ";
+	cout << "삭제할 번호를 입력하세요 : ";
 	cin >> n;
-	subs(head, n);
-	cnt--;
+	subs2(arr[n%13].down,n);
 }
-
-DFS *subs2(DFS *find)		//왼쪽트리에서 가장 큰 값을 찾기위함
+void subs2(Hash *pa, int n)
 {
-	if (find->right != NULL) //오른쪽에 값이 있으면
-		subs2(find->right); //다시 찾으러 ㄱㄱ
-	else //없으면 너 리턴
-		return find;
-}
-void subs(DFS *pa, int n)
-{
-	DFS *find;
-		find = search2(pa, n); //해당 위치 찾기
-
-	if (find->left == NULL && find->right == NULL)//해당 노드 자식이 없는경우
+	if (pa != NULL)
 	{
-		if (find->num < find->up->num)	//부모보다 작으면 왼쪽연결끊기
-			find->up->left == NULL;
-		else
-			find->up->right == NULL; //부모보다 크면 오른쪽연결 끊기
-	}
-	else if (find->left != NULL && find->right != NULL)//해당 노드 자식이 2개인경우
-	{
-		DFS *find2 = subs2(find->left); //자식중 가장 큰 값
-		if (find2->up->num != find->num)//바로 아래 자식이 아니었다면
+		if (pa->num == n)
 		{
-			if (find2->left != NULL)//자식이 있었다면
+			if (pa->down == NULL) //밑에 연결이 없는경우
 			{
-				find2->up->right = find2->left; //다른 자식 가리키기
-				find2->left->up = find2->up;
+				if (pa->up != NULL) //위에 연결 있는경우(처음은 없음)
+					pa->up->down = NULL; //아래 연결끊기
+				pa = NULL;
 			}
+			else //밑에 연결이 있는경우
+			{
+				if (pa->up != NULL)
+				{
+					pa->up->down = pa->down; //이전과 다음연결시키기
+					pa->down->up = pa->up;
+				}
+				else //다음연결로바로
+					arr[n % 13].down = pa->down;
+				pa = NULL;
 
-			find2->up = find->up;
-			if (find->up->left->num == find->num) //왼쪽자식이었으면
-				find->up->left = find2;
-			else
-				find->up->right = find2;
-
-			find->left->up = find2;
-			find->right->up = find2;
-			find2->left = find->left;
-			find2->right = find->right;
-
+			}
 		}
-	
-	}
-	else //해당 노드 자식이 1개인 경우
-	{
-		if (find->left != NULL) //왼쪽자식있는경우 부모가 여기로 연결
+		else //다음연결에서 찾기
 		{
-			if (find->up->left->num == find->num) //왼쪽자식이었으면
-				find->up->left = find->left;//왼쪽으로연결
+			if (pa->down == NULL)
+				cout << "삭제할 데이터를 찾지 못했습니다." << endl;
 			else
-				find->up->right = find->left;
-		}
-		else//오른쪽으로 연결
-		{
-			if (find->up->left->num == find->num) //왼쪽자식이었으면
-				find->up->left = find->right;//왼쪽으로연결
-			else
-				find->up->right = find->right;
+				subs2(pa->down, n);
 		}
 	}
-	delete find;
-}
-DFS *search2(DFS*pa,int n) {
-	if (n < pa->num) //작은값일경우
-		search2(pa->left, n);
-	else if (n > pa->num)//큰값일경우
-		search2(pa->right, n);
-	else if (pa->num == NULL)//없는 경우
-		cout << "해당 데이터가 존재하지 않습니다." << endl;
-	else //일치하는경우
-		return pa;
+	else
+		cout << "삭제할 데이터를 찾지 못했습니다." << endl;
 }
 void search()
 {
 	int n;
-	string Name;
-	
-	cout << "검색하는 데이터를 입력하세요.\n" << "번호 : ";
+	cout << "검색할 번호를 입력하세요 : ";
 	cin >> n;
-	if (head->num != n)
-		search1(head, n);
-	else
-	{
-		Name = head->name;
-		cout << "번호 : " << n << ", 이름 : " << Name << endl;
-	}
+	search2(arr[n % 13].down, n);
 }
-void search1(DFS *pa, int n)
+void search2(Hash *pa, int n)
 {
-	if (n < pa->num) //작은값일경우
-		search1(pa->left, n);
-	else if (n > pa->num)//큰값일경우
-		search1(pa->right, n);
-	else if (pa->num == NULL)//없는 경우
-		cout << "해당 데이터가 존재하지 않습니다." << endl;
-	else //일치하는경우
-		cout<<"번호 : "<<pa->num<<", 이름 : "<<pa->name<<endl;
+	if (pa != NULL)
+	{
+		if (pa->num == n)
+			cout << "검색에 성공했습니다 : " << n << " " << pa->name << endl;
+		else
+		{
+			if (pa->down == NULL)
+				cout << "검색에 실패했습니다!" << endl;
+			else
+				search2(pa->down, n);
+		}
+	}
+	else
+		cout << "검색에 실패했습니다!" << endl;
 }
 void print()
 {
-	cout << "[모든 노드 출력]" << endl;
-	print1(head);
-}
-void print1(DFS *list)
-{
-	if (list != NULL)
+	Hash *list = 0;
+	for (int i = 0; i < 13; i++)
 	{
-		print1(list->left);
-		cout << list->num << "번 " << list->name << endl;
-		print1(list->right);
+		cout << i<<" : ";
+		for (list = arr[i].down; list != NULL; list = list->down)
+		{
+			cout << "->" << list->num << "(" << list->name << ")";
+		}
+		cout << endl;
 	}
-	else {}
-}
-void deleteData(DFS *list)
-{
-	if (list != NULL) {
-		delete list->right;
-		delete list->left;
-		deleteData(list->left);
-		deleteData(list->right);
-	}
+
 }
 
 void menu()
@@ -234,7 +173,7 @@ void menu()
 
 	while (n != 0)
 	{
-		cout << endl << "(1)삽입 (2)삭제 (3)검색 (4)출력 (0)종료 : ";
+		cout << endl << "(1)삽입 (2)삭제 (3)검색 (4)덤프 (0)종료 : ";
 		cin >> n;
 		switch (n)
 		{
@@ -257,10 +196,303 @@ void menu()
 	}
 }
 
-void printTree()
-{
-	
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//#include <iostream>
+//#include <string>
+//
+//using namespace std;
+//
+//class DFS
+//{
+//public:
+//	int num;
+//	string name;
+//	DFS *right;
+//	DFS *left;
+//	DFS *up;
+//};
+////전역 변수
+//DFS *head = NULL;
+//int cnt = 0;
+//
+//
+//void menu();
+//void insert();
+//void substract();
+//void search();
+//void print();
+//void printTree();
+//
+//void compare1(DFS *pa, DFS *ch);
+//void deleteData(DFS *list);
+//void print1(DFS *list);
+//void search1(DFS *pa, int n);
+//DFS *search2(DFS*pa, int n);
+//void subs(DFS *pa, int n);
+//DFS *subs2(DFS *find);
+//
+//int main()
+//{
+//		menu();
+//
+//		//할당 해제
+//		DFS *list = head;
+//		deleteData(list);
+//		delete list;
+//
+//
+//	return 0;
+//}
+//
+//void insert()
+//{
+//	DFS *dfs = NULL;
+//	dfs = new DFS();
+//
+//	cout << "삽입하는 데이터를 입력하세요." << endl;
+//
+//	cout << "번호 : ";
+//	cin >> dfs->num;
+//	cout << "이름 : ";
+//	cin >> dfs->name;
+//
+//		if (head == NULL )
+//		{
+//		head = dfs; //처음일경우
+//		cout << head->num << " " << head->name<<endl;
+//		}
+//		else
+//		{
+//			compare1(head, dfs); //부모 노드와 자식노드 관계 비교
+//		}
+//		cnt++;
+//}
+//void compare1(DFS *pa, DFS *ch) //부모 자식
+//{
+//	if (ch->num < pa->num) //더 작을경우
+//	{
+//		if (pa->left == NULL)//왼쪽이 NULL이라면 삽입
+//		{
+//			pa->left = ch;
+//			ch->up = pa;
+//			cout << pa->left->num << " " << pa->left->name << endl;
+//		}
+//		else //왼쪽에 자식 노드가 있는 경우에는 다시 찾기
+//			compare1(pa->left, ch);
+//	}
+//	else if (ch->num > pa->num)//더 클 경우
+//	{
+//		if (pa->right == NULL)//오른쪽이 NULL이라면 삽입
+//		{
+//			pa->right = ch;
+//			ch->up = pa;
+//			cout << pa->right->num << " " << pa->right->name << endl;
+//		}
+//		else//자식노드가 있다면 하위에서 다시 찾기
+//			compare1(pa->right, ch);
+//	}
+//}
+//void substract()
+//{
+//	int n;
+//	cout << "삭제하는 데이터를 입력하세요.\n" << "번호 : ";
+//	cin >> n;
+//	subs(head, n);
+//	cnt--;
+//}
+//
+//DFS *subs2(DFS *find)		//왼쪽트리에서 가장 큰 값을 찾기위함
+//{
+//	if (find->right != NULL) //오른쪽에 값이 있으면
+//		subs2(find->right); //다시 찾으러 ㄱㄱ
+//	else //없으면 너 리턴
+//		return find;
+//}
+//void subs(DFS *pa, int n)
+//{
+//	DFS *find;
+//		find = search2(pa, n); //해당 위치 찾기
+//
+//	if (find->left == NULL && find->right == NULL)//해당 노드 자식이 없는경우
+//	{
+//		if (find->num < find->up->num)	//부모보다 작으면 왼쪽연결끊기
+//			find->up->left == NULL;
+//		else
+//			find->up->right == NULL; //부모보다 크면 오른쪽연결 끊기
+//	}
+//	else if (find->left != NULL && find->right != NULL)//해당 노드 자식이 2개인경우
+//	{
+//		DFS *find2 = subs2(find->left); //자식중 가장 큰 값
+//		if (find2->up->num != find->num)//바로 아래 자식이 아니었다면
+//		{
+//			if (find2->left != NULL)//자식이 있었다면
+//			{
+//				find2->up->right = find2->left; //다른 자식 가리키기
+//				find2->left->up = find2->up;
+//			}
+//
+//			find2->up = find->up;
+//			if (find->up->left->num == find->num) //왼쪽자식이었으면
+//				find->up->left = find2;
+//			else
+//				find->up->right = find2;
+//
+//			find->left->up = find2;
+//			find->right->up = find2;
+//			find2->left = find->left;
+//			find2->right = find->right;
+//
+//		}
+//	
+//	}
+//	else //해당 노드 자식이 1개인 경우
+//	{
+//		if (find->left != NULL) //왼쪽자식있는경우 부모가 여기로 연결
+//		{
+//			if (find->up->left->num == find->num) //왼쪽자식이었으면
+//				find->up->left = find->left;//왼쪽으로연결
+//			else
+//				find->up->right = find->left;
+//		}
+//		else//오른쪽으로 연결
+//		{
+//			if (find->up->left->num == find->num) //왼쪽자식이었으면
+//				find->up->left = find->right;//왼쪽으로연결
+//			else
+//				find->up->right = find->right;
+//		}
+//	}
+//	delete find;
+//}
+//DFS *search2(DFS*pa,int n) {
+//	if (n < pa->num) //작은값일경우
+//		search2(pa->left, n);
+//	else if (n > pa->num)//큰값일경우
+//		search2(pa->right, n);
+//	else if (pa->num == NULL)//없는 경우
+//		cout << "해당 데이터가 존재하지 않습니다." << endl;
+//	else //일치하는경우
+//		return pa;
+//}
+//void search()
+//{
+//	int n;
+//	string Name;
+//	
+//	cout << "검색하는 데이터를 입력하세요.\n" << "번호 : ";
+//	cin >> n;
+//	if (head->num != n)
+//		search1(head, n);
+//	else
+//	{
+//		Name = head->name;
+//		cout << "번호 : " << n << ", 이름 : " << Name << endl;
+//	}
+//}
+//void search1(DFS *pa, int n)
+//{
+//	if (n < pa->num) //작은값일경우
+//		search1(pa->left, n);
+//	else if (n > pa->num)//큰값일경우
+//		search1(pa->right, n);
+//	else if (pa->num == NULL)//없는 경우
+//		cout << "해당 데이터가 존재하지 않습니다." << endl;
+//	else //일치하는경우
+//		cout<<"번호 : "<<pa->num<<", 이름 : "<<pa->name<<endl;
+//}
+//void print()
+//{
+//	cout << "[모든 노드 출력]" << endl;
+//	print1(head);
+//}
+//void print1(DFS *list)
+//{
+//	if (list != NULL)
+//	{
+//		print1(list->left);
+//		cout << list->num << "번 " << list->name << endl;
+//		print1(list->right);
+//	}
+//	else {}
+//}
+//void deleteData(DFS *list)
+//{
+//	if (list != NULL) {
+//		delete list->right;
+//		delete list->left;
+//		deleteData(list->left);
+//		deleteData(list->right);
+//	}
+//}
+//
+//void menu()
+//{
+//	int n = 1;
+//
+//	while (n != 0)
+//	{
+//		cout << endl << "(1)삽입 (2)삭제 (3)검색 (4)출력 (0)종료 : ";
+//		cin >> n;
+//		switch (n)
+//		{
+//		case 1:
+//			insert();
+//			break;
+//		case 2:
+//			substract();
+//			break;
+//		case 3:
+//			search();
+//			break;
+//		case 4:
+//			print();
+//			break;
+//		case 0:
+//			break;
+//		default: cout << "유효한 숫자를 입력하세요" << endl;
+//		}
+//	}
+//}
+//
+//void printTree()
+//{
+//	
+//}
 
 
 
