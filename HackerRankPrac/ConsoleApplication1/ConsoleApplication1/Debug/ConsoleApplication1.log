@@ -1,0 +1,2 @@
+﻿  ConsoleApplication1.cpp
+d:\c+++\hackerrankprac\consoleapplication1\consoleapplication1\consoleapplication1.cpp(5): fatal error C1083: 포함 파일을 열 수 없습니다. 'bits/stdc++.h': No such file or directory
